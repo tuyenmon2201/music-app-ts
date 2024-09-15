@@ -11,7 +11,8 @@
   "description": "",
   "dependencies": {
     "express": "^4.21.0",
-    "music-app-ts": "file:"
+    "music-app-ts": "file:",
+    "pug": "^3.0.3"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
