@@ -3,6 +3,7 @@ import Singer from "../../models/singer.model";
 import Song from "../../models/song.model";
 import Topic from "../../models/topic.model";
 import { Request, Response } from "express";
+import unidecode from 'unidecode';
 
 export const list = async (req: Request, res: Response) => {
     const slugTopic: string = req.params.slugTopic;
@@ -158,10 +159,23 @@ export const search = async (req: Request, res: Response) => {
     let songs = [];
 
     if(keyword){
-        const regex = new RegExp(keyword, "i");
+        let keywordSlug = keyword.trim();
+
+        keywordSlug = keywordSlug.replace(/\s/g, "-");
+        keywordSlug = keywordSlug.replace(/-+/g, "-");
+        keywordSlug = unidecode(keywordSlug);
+
+        console.log(keyword);
+        console.log(keywordSlug);
+
+        const regexKeyword = new RegExp(keyword, "i");
+        const regexKeywordSlug = new RegExp(keywordSlug, "i");
 
         songs = await Song.find({
-            title: regex,
+            $or: [
+                { title: regexKeyword },
+                { slug: regexKeywordSlug }
+            ],
             deleted: false,
             status: "active"
         }).select("title avatar singerId like slug");
