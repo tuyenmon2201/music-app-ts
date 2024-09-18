@@ -1,3 +1,4 @@
+import FavoriteSong from "../../models/favorite-song.model";
 import Singer from "../../models/singer.model";
 import Song from "../../models/song.model";
 import Topic from "../../models/topic.model";
@@ -49,6 +50,15 @@ export const detail = async (req: Request, res: Response) => {
         _id: song.topicId
     }).select("title");
 
+    const existSongInFavorite = await FavoriteSong.findOne({
+        // userId: res.locals.user.id,
+        songId: song.id
+    });
+
+    if(existSongInFavorite){
+        song["isFavorite"] = true;
+    }
+
     res.render("client/pages/songs/detail", {
         pageTitle: "Chi tiết bài hát",
         song: song,
@@ -87,6 +97,33 @@ export const like = async (req: Request, res: Response) => {
         code: 200,
         updateLike: updateLike,
         message: "Cập nhật thành công!"
+    });
+
+}
+
+export const favorite = async (req: Request, res: Response) => {
+    const { id } = req.body;
+
+    const data = {
+        songId: id
+    }
+
+    const existSongInFavorite = await FavoriteSong.findOne(data);
+
+    let status = "";
+
+    if(existSongInFavorite){
+        await FavoriteSong.deleteOne(data);
+    }
+    else {
+        const record = new FavoriteSong(data);
+        await record.save();
+        status = "add"
+    }
+
+    res.json({
+        code: 200,
+        status: status
     });
 
 }
