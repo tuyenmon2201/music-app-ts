@@ -217,3 +217,28 @@ export const search = async (req: Request, res: Response) => {
         })
     }
 }
+
+export const listen = async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const song = await Song.findOne({
+        _id: id,
+        status: "active",
+        deleted: false
+    });
+
+    const updateListen = song.listen + 1;
+
+    await Song.updateOne({
+        _id: id,
+        status: "active",
+        deleted: false
+    }, {
+        listen: updateListen
+    });
+
+    res.json({
+        code: 200,
+        listen: updateListen
+    });
+}
