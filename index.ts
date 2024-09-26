@@ -1,10 +1,14 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
+import methodOverride from "method-override";
 dotenv.config();
 
 const app: Express = express();
 const port: number | string = process.env.PORT || 3003;
+
+// method-override
+app.use(methodOverride('_method'));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
