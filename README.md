@@ -93,9 +93,9 @@ npm install
 
 Create a .env file in the root directory and configure the following variables:
 
-PORT=3000
-MONGODB_URI=your_mongodb_connection_string
-SESSION_SECRET=your_secret_key
+- PORT=3000
+- MONGODB_URI=your_mongodb_connection_string
+- SESSION_SECRET=your_secret_key
 
 📌 **Start the Application**
 
